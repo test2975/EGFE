@@ -28,7 +28,7 @@ and it can also work on Windows.
 `python scripts/convert_sketch.py --input [sketch_folder] --output ./data`
 * Generate train and test format index files
 `python scripts/convert_config.py [config.json file path] ./data/output`
-* Since the code uses sketchtool, tt has to run on macOS.
+* Since the scripts use [sketchtool](https://developer.sketch.com/cli/export-assets), it has to run on macOS.
 
 ## Data preparation
 
