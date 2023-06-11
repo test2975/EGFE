@@ -1,0 +1,16 @@
+.idea
+**/__pycache__
+**/*.pth
+**/tensorboard/*
+**/checkpoints/*
+**/config.json
+**/log.txt
+work_dir/
+**/venv
+./*.zip
+vis_image/
+vis_image_train/
+vis_image_test/
+*.json
+*.out
+static/
