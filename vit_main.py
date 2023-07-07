@@ -22,7 +22,7 @@ from torch.optim.lr_scheduler import _LRScheduler
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler, BatchSampler, DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
 from transformers import AutoTokenizer, PreTrainedTokenizer
-from vision_transformer import vit
+from vision_transformer import vit, vit2
 from sketch_model.configs import SketchModelConfig, config_with_arg, ModelConfig
 from sketch_model.datasets import build_dataset
 from sketch_model.utils import misc as utils, f1score, r2score, accuracy_simple, creat_confusion_matrix, precision, recall, confusion_matrix
@@ -67,8 +67,8 @@ def init_model(
     config: SketchModelConfig, checkpoint: Dict[str, Any], device: torch.device
 ) -> Tuple[PreTrainedTokenizer, SketchLayerClassifierModel, Loss, Optimizer,
            _LRScheduler]:
-    model = vit.ViT(image_size=64,
-                    patch_size=64,
+    model = vit2.ViT(image_size=256,
+                    patch_size=32,
                     num_classes=3,
                     dim=1024,
                     depth=6,

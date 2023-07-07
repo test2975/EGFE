@@ -10,6 +10,8 @@ import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 from einops import rearrange
+from torchvision import models
+
 import torch.nn.functional as F
 try:
     import os, sys
@@ -525,7 +527,6 @@ class SwinTransformer(nn.Module):
         self.patch_norm = patch_norm
         self.num_features = int(embed_dim * 2 ** (self.num_layers - 1))
         self.mlp_ratio = mlp_ratio
-
         # split image into non-overlapping patches
         self.patch_embed = PatchEmbed(
             img_size=img_size, patch_size=patch_size, in_chans=in_chans, embed_dim=embed_dim,
@@ -587,26 +588,27 @@ class SwinTransformer(nn.Module):
         return {'relative_position_bias_table'}
 
     def forward_features(self, x):
-        x = self.patch_embed(x)
+        x = x.tensors
+        B, L, C, H, W = x.shape
+        
+        x = rearrange(x, 'B L C H W -> (B L) C H W')
+        x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
+        
+        x = self.patch_embed(x) # 1,3136 B L C
+        
         if self.ape:
             x = x + self.absolute_pos_embed
         x = self.pos_drop(x)
 
         for layer in self.layers:
             x = layer(x)
-
-        x = self.norm(x)  # B L C
+        x = self.norm(x)  # B L 3
         x = self.avgpool(x.transpose(1, 2))  # B C 1
         x = torch.flatten(x, 1)
-        return x
+        return x.view(B,L,-1)
 
     def forward(self, x):
-        x = x.tensors
-        B, L, C, H, W = x.shape
-        x = rearrange(x, 'B L C H W -> (B L) C H W')
-        x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
         x = self.forward_features(x)
-        x = x.view(B, L, -1)
         x = self.head(x)
         return x
 
@@ -618,3 +620,8 @@ class SwinTransformer(nn.Module):
         flops += self.num_features * self.patches_resolution[0] * self.patches_resolution[1] // (2 ** self.num_layers)
         flops += self.num_features * self.num_classes
         return flops
+
+# input = torch.rand((1,3,224,224))
+# input = torch.rand((1,3,3,224,224))
+# sw = SwinTransformer()
+# print(sw(input).shape)
