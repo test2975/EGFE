@@ -30,13 +30,13 @@ and it can also work on Windows.
 `python scripts/convert_config.py [config.json file path] ./data/output`
 * Since the scripts use [sketchtool](https://developer.sketch.com/cli/export-assets), it has to run on macOS.
 
-## Data preparation
+## Data Preparation
 
 * Contact the authours of this paper to request the training dataset, and modified the path of `train_index_json` and `test_index_json` in `./sketch_model/configs/config.py`.
 
 * Download the [testing dataset](https://zenodo.org/record/8022996), and have it in the 'dataset' folder.
 
-## To Train
+## Train Our Model
 
 * Start to train with
 
@@ -44,7 +44,7 @@ and it can also work on Windows.
 torchrun --nnodes 1 --nproc_per_node 4  main_ddp.py --batch_size 10 --lr 5e-4
 ```
 
-## To Test
+## Test Our Model
 
 * Download the pre-trained [EGFE](https://zenodo.org/record/8022996) model, and put it in the `'./work_dir'` folder.
 * Start to test with
@@ -52,3 +52,73 @@ torchrun --nnodes 1 --nproc_per_node 4  main_ddp.py --batch_size 10 --lr 5e-4
 ```sh
 torchrun --nnodes 1 --nproc_per_node 4  main_ddp.py --evaluate --resume ./work_dir/set-wei-05-0849/checkpoints/latest.pth --batch_size 40
 ```
+
+## Baselines of UI Fragmented Element Classification
+
+### EfficientNet
+
+* Start to train with
+
+```sh
+torchrun --nnodes 1 --nproc_per_node 4  efficient_main.py --batch_size 4 --lr 5e-4
+```
+
+* Start to test with
+
+```sh
+torchrun --nnodes 1 --nproc_per_node 4  efficient_main.py --evaluate --resume ./work_dir/efficient_net/latest.pth --batch_size 8
+```
+
+### Vision Transformer(ViT)
+
+* Start to train with
+
+```sh
+torchrun --nnodes 1 --nproc_per_node 4  vit_main.py --batch_size 4 --lr 5e-4
+```
+
+* Start to test with
+
+```sh
+torchrun --nnodes 1 --nproc_per_node 4  vit_main.py --evaluate --resume ./work_dir/vit/latest.pth --batch_size 8
+```
+
+### Swin Transformer
+
+* Start to train with
+
+```sh
+torchrun --nnodes 1 --nproc_per_node 4  sw_vit_main.py --batch_size 4 --lr 5e-4
+```
+
+* Start to test with
+
+```sh
+torchrun --nnodes 1 --nproc_per_node 4  sw_vit_main.py --evaluate --resume ./work_dir/swin/latest.pth --batch_size 8
+```
+
+## Baselines of UI Fragmented Elements Grouping
+
+### UILM
+
+Please refer to <https://github.com/zjl12138/UILM/>
+
+### ULDGNN
+
+Please refer to <https://github.com/zjl12138/ULDGNN>
+
+### UIED
+
+Please refer to <https://github.com/MulongXie/UIED>
+
+## ACKNOWNLEDGES
+
+The implementations of EfficientNet, Vision Transformer, and Swin Transformer are based on the following GitHub Repositories. Thank for the works.
+
+* EfficientNet: <https://github.com/lukemelas/EfficientNet-PyTorch>
+* ViT: <https://github.com/lucidrains/vit-pytorch>
+* Swin Transformer: <https://github.com/microsoft/Swin-Transformer>
+
+
+## Model Resources
+
