@@ -46,7 +46,7 @@ torchrun --nnodes 1 --nproc_per_node 4  main_ddp.py --batch_size 10 --lr 5e-4
 
 ## Test Our Model
 
-* Download the pre-trained [EGFE](https://zenodo.org/record/8022996) model, and put it in the `'./work_dir'` folder.
+* Download the pre-trained [EGFE](https://zenodo.org/record/8132008) model, and put it in the `'./work_dir'` folder.
 * Start to test with
 
 ```sh
@@ -109,7 +109,9 @@ Please refer to <https://github.com/zjl12138/ULDGNN>
 
 ### UIED
 
-Please refer to <https://github.com/MulongXie/UIED>
+We have released a UI component classifier (binary classification) for UIED trained on our dataset. It can be downloaded from [pretrained model](https://zenodo.org/record/8132008).
+
+Please refer to the open-source code <https://github.com/MulongXie/UIED>
 
 ## ACKNOWNLEDGES
 
@@ -119,6 +121,6 @@ The implementations of EfficientNet, Vision Transformer, and Swin Transformer ar
 * ViT: <https://github.com/lucidrains/vit-pytorch>
 * Swin Transformer: <https://github.com/microsoft/Swin-Transformer>
 
-
 ## Model Resources
 
+You can download all the model checkpoints from [pre-trained model.7z](https://zenodo.org/record/8132008).
